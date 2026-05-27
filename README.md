@@ -136,3 +136,41 @@ Ce projet a été réalisé en binôme dans le cadre d'un stage de 2 mois (mars 
 │    BACKEND FLASK     │──────► UPDATE PostgreSQL
 │      (API REST)      │
 └──────────────────────┘
+Défis & Solutions
+🔴 Défi 1 — Données sources incohérentes
+
+Le fichier Excel d'origine contenait des doublons de noms d'agences, des valeurs non standardisées (« Mensuel », « mensuel », « M »), et des colonnes redondantes codant la même information de deux façons différentes.
+
+Solution : Pipeline de nettoyage Python systématique avec standardisation des valeurs catégorielles, fusion des colonnes de modalité de révision en une seule colonne numérique, et vérification manuelle des cas limites avant import.
+
+🔴 Défi 2 — Logique métier complexe pour les révisions de montants
+
+La base ne stockait que le dernier montant annuel TTC. Calculer le prochain montant à payer nécessitait de chaîner plusieurs transformations : division par la périodicité, déduction de la TVA, application du taux de révision si la date de révision est dépassée, puis ré-application de la TVA.
+
+Solution : Décomposition en fonctions atomiques indépendantes et testables, chacune couvrant un seul calcul (HT → TTC, date d'échéance, date de révision, montant révisé), enchaînées dans un ordre déterministe.
+
+🔴 Défi 3 — Emails interactifs sans framework front-end
+
+Intégrer des boutons fonctionnels dans des emails (contexte très limité : pas de JavaScript, clients mail variés) tout en déclenchant des mises à jour base de données réelles.
+
+Solution : Boutons HTML/CSS purs avec liens href pointant vers des endpoints Flask paramétrés (/confirm?id_paiement=X&action=oui). Le serveur Flask reçoit la requête GET, exécute l'UPDATE PostgreSQL correspondant et retourne une page de confirmation simple.
+
+Contexte académique
+
+Projet de Fin d'Année — Licence Mathématiques Appliquées, spécialité Sciences des données
+Faculté des Sciences de Tunis — Université Tunis El Manar
+Période : Mars – Mai 2025
+Méthodologie : Agile Scrum (4 sprints)
+
+Confidentialité
+
+Ce projet a été réalisé dans un contexte professionnel réel.
+
+Par respect des politiques internes de confidentialité et de sécurité :
+
+aucun code source n’est publié ;
+aucune donnée réelle n’est partagée ;
+aucun dashboard ou document interne n’est rendu public ;
+aucune infrastructure ou configuration sensible n’est exposée.
+
+Ce dépôt a uniquement un objectif de présentation technique et pédagogique.
